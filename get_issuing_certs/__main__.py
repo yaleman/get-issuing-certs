@@ -3,16 +3,16 @@ from get_issuing_certs import (
     check_ca_true,
     get_certificates,
     is_cert_in_file,
-    parse_argv,
+    parse_args,
 )
 
 
 def main() -> None:
     """main script bits"""
-    config = parse_argv()
+    config = parse_args()
 
     print(
-        f"Checking {config['hostname']}:{config['port']} and adding to {config['target_file']}",
+        f"Checking {config['hostname']}:{config['port']} and adding to {config['filename']}",
         file=sys.stderr,
     )
 
@@ -25,9 +25,9 @@ def main() -> None:
     for idx, cert in enumerate(certificates):
         if not check_ca_true(cert):
             continue
-        if not is_cert_in_file(cert, config["target_file"]):
+        if not is_cert_in_file(cert, config["filename"]):
             print(f"Certificate {idx} not found in file, adding it!", file=sys.stderr)
-            with open(config["target_file"], "a") as f:
+            with open(config["filename"], "a") as f:
                 f.write(f"\n{cert}")
         else:
             print(f"Certificate {idx} already in file", file=sys.stderr)
