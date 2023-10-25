@@ -28,9 +28,20 @@ def main() -> None:
         if not is_cert_in_file(cert, config["filename"]):
             print(f"Certificate {idx} not found in file, adding it!", file=sys.stderr)
             with open(config["filename"], "a") as f:
-                f.write(f"\n{cert}")
+                f.write(f"\n{cert}\n")
         else:
             print(f"Certificate {idx} already in file", file=sys.stderr)
+
+    # clean up the file
+    with open(config["filename"], "r") as f:
+        lines = f.readlines()
+    # strip blank lines
+    lines = [line.strip() for line in lines if line.strip()]
+
+    # write it back, with a trailing newline
+    with open(config["filename"], "w") as f:
+        f.write("\n".join(lines))
+        f.write("\n")
 
 
 if __name__ == "__main__":
